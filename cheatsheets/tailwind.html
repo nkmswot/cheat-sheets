@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind CSS Cheatsheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+    <div class="max-w-3xl mx-auto">
+         <nav class="text-gray-400 mb-4">
+            <a href="../index.html" class="text-blue-400 hover:underline">Home</a> / <span class="text-gray-300">Tailwind Cheatsheet</span>
+        </nav>
+        <h1 class="text-3xl font-bold mb-4 text-center">Tailwind CSS Cheatsheet</h1>
+        <input type="text" id="search" placeholder="Search a class..." class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded-md">
+        <div id="cheatsheet" class="space-y-2"></div>
+    </div>
+    
+    <script>
+        const classes = [
+            { name: 'flex', desc: 'Enables flexbox' },
+            { name: 'flex-row / flex-col', desc: 'Direction' },
+            { name: 'items-center', desc: 'Align items vertically' },
+            { name: 'justify-center', desc: 'Align items horizontally' },
+            { name: 'gap-4', desc: 'Spacing between items' },
+            { name: 'grid grid-cols-3', desc: '3-column grid' },
+            { name: 'place-items-center', desc: 'Center in grid' },
+            { name: 'm-4', desc: 'Margin 4' },
+            { name: 'mx-4 / my-4', desc: 'Horizontal / Vertical margin' },
+            { name: 'p-4', desc: 'Padding 4' },
+            { name: 'px-6 / py-6', desc: 'Horizontal / Vertical padding' },
+            { name: 'w-full', desc: 'Full width' },
+            { name: 'w-1/2', desc: '50% width' },
+            { name: 'h-64', desc: 'Fixed height' },
+            { name: 'min-h-screen', desc: 'Minimum height of screen' },
+            { name: 'text-xl', desc: 'Font size' },
+            { name: 'font-bold', desc: 'Bold text' },
+            { name: 'text-gray-500', desc: 'Text color' },
+            { name: 'text-center', desc: 'Align text' },
+            { name: 'tracking-wide', desc: 'Letter spacing' },
+            { name: 'leading-relaxed', desc: 'Line height' },
+            { name: 'bg-blue-500', desc: 'Background color' },
+            { name: 'hover:bg-blue-700', desc: 'Hover effect' },
+            { name: 'rounded-lg', desc: 'Border radius' },
+            { name: 'border border-gray-300', desc: 'Border with color' },
+            { name: 'shadow-lg', desc: 'Box shadow' },
+            { name: 'relative / absolute / fixed', desc: 'Positioning' },
+            { name: 'top-0 left-0', desc: 'Position at top-left' },
+            { name: 'z-10', desc: 'Set stack order' },
+            { name: 'opacity-50', desc: '50% transparency' },
+            { name: 'hover:scale-105', desc: 'Slight zoom effect' },
+            { name: 'transition-all duration-300', desc: 'Smooth animation' },
+            { name: 'cursor-pointer', desc: 'Pointer cursor' },
+            { name: 'overflow-hidden', desc: 'Hide overflow content' },
+            { name: 'hidden', desc: 'Hide element' }
+        ];
+        
+        const cheatsheetDiv = document.getElementById("cheatsheet");
+        const searchInput = document.getElementById("search");
+        
+        function renderCheatsheet(filter = "") {
+            cheatsheetDiv.innerHTML = "";
+            classes.filter(cls => cls.name.includes(filter)).forEach(cls => {
+                const div = document.createElement("div");
+                div.className = "flex justify-between p-2 bg-gray-800 rounded-md cursor-pointer hover:bg-gray-700";
+                div.innerHTML = `<span class='font-mono text-yellow-400'>${cls.name}</span> <span>${cls.desc}</span>`;
+                div.onclick = async () => {
+                    await navigator.clipboard.writeText(cls.name);
+                    const notification = document.createElement("div");
+                    notification.className = "fixed bottom-4 right-4 bg-green-500 text-white p-2 rounded-md shadow-lg";
+                    notification.innerText = `Copied: ${cls.name}`;
+                    document.body.appendChild(notification);
+                    setTimeout(() => notification.remove(), 2000);
+                };
+                cheatsheetDiv.appendChild(div);
+            });
+        }
+        
+        searchInput.addEventListener("input", (e) => renderCheatsheet(e.target.value));
+        
+        renderCheatsheet();
+    </script>
+
+    <footer class="mt-10 text-center text-gray-400">
+        Made with ❤️ by Karthik &copy; <span id="year"></span>
+    </footer>
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

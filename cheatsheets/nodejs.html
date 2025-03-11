@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Cheatsheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+    <div class="max-w-3xl mx-auto">
+         <nav class="text-gray-400 mb-4">
+            <a href="../index.html" class="text-blue-400 hover:underline">Home</a> / <span class="text-gray-300">Node JS Cheatsheet</span>
+        </nav>
+        <h1 class="text-3xl font-bold mb-4 text-center">Node.js Cheatsheet</h1>
+        <input type="text" id="search" placeholder="Search a keyword..." class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded-md">
+        <div id="cheatsheet" class="space-y-2"></div>
+    </div>
+    
+    <script>
+        const snippets = [
+            { name: 'Create Server', code: "const http = require('http');\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'Content-Type': 'text/plain' });\n  res.end('Hello World');\n});\nserver.listen(3000, () => console.log('Server running on port 3000'));" },
+            { name: 'Read File', code: "const fs = require('fs');\nfs.readFile('file.txt', 'utf8', (err, data) => {\n  if (err) throw err;\n  console.log(data);\n});" },
+            { name: 'Write File', code: "fs.writeFile('file.txt', 'Hello, Node!', err => {\n  if (err) throw err;\n  console.log('File written!');\n});" },
+            { name: 'Using Express', code: "const express = require('express');\nconst app = express();\napp.get('/', (req, res) => res.send('Hello, Express!'));\napp.listen(3000, () => console.log('Server running on port 3000'));" },
+            { name: 'Environment Variables', code: "require('dotenv').config();\nconsole.log(process.env.SECRET_KEY);" },
+            { name: 'Using Middleware', code: "app.use((req, res, next) => {\n  console.log('Middleware executed');\n  next();\n});" },
+            { name: 'Fetch API', code: "const fetch = require('node-fetch');\nfetch('https://api.example.com')\n  .then(res => res.json())\n  .then(data => console.log(data));" },
+            { name: 'Connect to MongoDB', code: "const mongoose = require('mongoose');\nmongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })\n  .then(() => console.log('Connected to MongoDB'))\n  .catch(err => console.error(err));" },
+            { name: 'JWT Authentication', code: "const jwt = require('jsonwebtoken');\nconst token = jwt.sign({ user: 'JohnDoe' }, 'secret', { expiresIn: '1h' });\nconsole.log(token);" },
+        ];
+
+        const cheatsheetDiv = document.getElementById("cheatsheet");
+        const searchInput = document.getElementById("search");
+
+        function renderCheatsheet(filter = "") {
+            cheatsheetDiv.innerHTML = "";
+            snippets.filter(snippet => snippet.name.toLowerCase().includes(filter.toLowerCase())).forEach(snippet => {
+                const div = document.createElement("div");
+                div.className = "flex justify-between p-2 bg-gray-800 rounded-md cursor-pointer hover:bg-gray-700";
+                div.innerHTML = `<span class='font-mono text-yellow-400'>${snippet.name}</span> <code class='text-gray-300'>${snippet.code}</code>`;
+                div.onclick = async () => {
+                    await navigator.clipboard.writeText(snippet.code);
+                    showNotification(`Copied: ${snippet.name}`);
+                };
+                cheatsheetDiv.appendChild(div);
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement("div");
+            notification.className = "fixed bottom-4 right-4 p-3 bg-green-500 text-white rounded-md shadow-lg";
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => document.body.removeChild(notification), 2000);
+        }
+
+        searchInput.addEventListener("input", (e) => renderCheatsheet(e.target.value));
+        renderCheatsheet();
+    </script>
+    
+    <footer class="mt-10 text-center text-gray-400">
+        Made with ❤️ by Karthik &copy; <span id="year"></span>
+    </footer>
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

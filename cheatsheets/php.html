@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Cheatsheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+    <div class="max-w-3xl mx-auto">
+         <nav class="text-gray-400 mb-4">
+            <a href="../index.html" class="text-blue-400 hover:underline">Home</a> / <span class="text-gray-300">PHP Cheatsheet</span>
+        </nav>
+        <h1 class="text-3xl font-bold mb-4 text-center">PHP Cheatsheet</h1>
+        <input type="text" id="search" placeholder="Search a keyword..." class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded-md">
+        <div id="cheatsheet" class="space-y-2"></div>
+    </div>
+    
+    <script>
+        const snippets = [
+            { name: 'Echo', code: '<?php echo "Hello, World!"; ?>' },
+            { name: 'Variables', code: '<?php $name = "John"; ?>' },
+            { name: 'If Statement', code: '<?php if ($age > 18) { echo "Adult"; } ?>' },
+            { name: 'For Loop', code: '<?php for ($i = 0; $i < 10; $i++) { echo $i; } ?>' },
+            { name: 'While Loop', code: '<?php while ($x < 5) { echo $x; $x++; } ?>' },
+            { name: 'Function', code: '<?php function greet($name) { return "Hello, " . $name; } ?>' },
+            { name: 'Array', code: '<?php $arr = array("Apple", "Banana", "Cherry"); ?>' },
+            { name: 'Associative Array', code: '<?php $user = ["name" => "John", "age" => 30]; ?>' },
+            { name: 'Foreach Loop', code: '<?php foreach ($arr as $fruit) { echo $fruit; } ?>' },
+            { name: 'Include File', code: '<?php include "header.php"; ?>' },
+            { name: 'Require File', code: '<?php require "config.php"; ?>' },
+            { name: 'Class & Object', code: '<?php class Car { public $brand; function __construct($brand) { $this->brand = $brand; } } ?>' },
+            { name: 'Try-Catch', code: '<?php try { throw new Exception("Error Message"); } catch (Exception $e) { echo $e->getMessage(); } ?>' },
+            { name: 'JSON Encode', code: '<?php echo json_encode($arr); ?>' },
+            { name: 'JSON Decode', code: '<?php $data = json_decode($json, true); ?>' },
+            { name: 'PDO Connection', code: '<?php $pdo = new PDO("mysql:host=localhost;dbname=test", "root", ""); ?>' }
+        ];
+
+        const cheatsheetDiv = document.getElementById("cheatsheet");
+        const searchInput = document.getElementById("search");
+
+        function renderCheatsheet(filter = "") {
+            cheatsheetDiv.innerHTML = "";
+            snippets.filter(snippet => snippet.name.toLowerCase().includes(filter.toLowerCase())).forEach(snippet => {
+                const div = document.createElement("div");
+                div.className = "flex justify-between p-2 bg-gray-800 rounded-md cursor-pointer hover:bg-gray-700";
+                div.innerHTML = `<span class='font-mono text-yellow-400'>${snippet.name}</span> <code class='text-gray-300'>${snippet.code}</code>`;
+                div.onclick = async () => {
+                    await navigator.clipboard.writeText(snippet.code);
+                    showNotification(`Copied: ${snippet.code}`);
+                };
+                cheatsheetDiv.appendChild(div);
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement("div");
+            notification.className = "fixed bottom-4 right-4 p-3 bg-green-500 text-white rounded-md shadow-lg";
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => document.body.removeChild(notification), 2000);
+        }
+
+        searchInput.addEventListener("input", (e) => renderCheatsheet(e.target.value));
+        renderCheatsheet();
+    </script>
+    
+    <footer class="mt-10 text-center text-gray-400">
+        Made with ❤️ by Karthik &copy; <span id="year"></span>
+    </footer>
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

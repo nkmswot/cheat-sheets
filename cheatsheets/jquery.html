@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Cheatsheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+    <div class="max-w-3xl mx-auto">
+         <nav class="text-gray-400 mb-4">
+            <a href="../index.html" class="text-blue-400 hover:underline">Home</a> / <span class="text-gray-300">jQuery Cheatsheet</span>
+        </nav>
+        <h1 class="text-3xl font-bold mb-4 text-center">jQuery Cheatsheet</h1>
+        <input type="text" id="search" placeholder="Search a function..." class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded-md">
+        <div id="cheatsheet" class="space-y-2"></div>
+    </div>
+    
+    <script>
+        const snippets = [
+            { name: 'Document Ready', code: '$(document).ready(function() { ... });' },
+            { name: 'Select Element', code: "$('#element')" },
+            { name: 'Hide Element', code: "$('#element').hide();" },
+            { name: 'Show Element', code: "$('#element').show();" },
+            { name: 'Toggle Element', code: "$('#element').toggle();" },
+            { name: 'Add Class', code: "$('#element').addClass('class-name');" },
+            { name: 'Remove Class', code: "$('#element').removeClass('class-name');" },
+            { name: 'Toggle Class', code: "$('#element').toggleClass('class-name');" },
+            { name: 'Set Text', code: "$('#element').text('New Text');" },
+            { name: 'Set HTML', code: "$('#element').html('<b>Bold Text</b>');" },
+            { name: 'Set Attribute', code: "$('#element').attr('href', 'https://example.com');" },
+            { name: 'Append Content', code: "$('#element').append('<p>New Content</p>');" },
+            { name: 'Prepend Content', code: "$('#element').prepend('<p>New Content</p>');" },
+            { name: 'Remove Element', code: "$('#element').remove();" },
+            { name: 'Fade In', code: "$('#element').fadeIn();" },
+            { name: 'Fade Out', code: "$('#element').fadeOut();" },
+            { name: 'Slide Up', code: "$('#element').slideUp();" },
+            { name: 'Slide Down', code: "$('#element').slideDown();" },
+            { name: 'Ajax Request', code: "$.ajax({ url: 'data.json', success: function(result){ console.log(result); } });" }
+        ];
+
+        const cheatsheetDiv = document.getElementById("cheatsheet");
+        const searchInput = document.getElementById("search");
+
+        function renderCheatsheet(filter = "") {
+            cheatsheetDiv.innerHTML = "";
+            snippets.filter(snippet => snippet.name.toLowerCase().includes(filter.toLowerCase())).forEach(snippet => {
+                const div = document.createElement("div");
+                div.className = "flex justify-between p-2 bg-gray-800 rounded-md cursor-pointer hover:bg-gray-700";
+                div.innerHTML = `<span class='font-mono text-yellow-400'>${snippet.name}</span> <code class='text-gray-300'>${snippet.code}</code>`;
+                div.onclick = async () => {
+                    await navigator.clipboard.writeText(snippet.code);
+                    showNotification(`Copied: ${snippet.code}`);
+                };
+                cheatsheetDiv.appendChild(div);
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement("div");
+            notification.className = "fixed bottom-4 right-4 p-3 bg-green-500 text-white rounded-md shadow-lg";
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => document.body.removeChild(notification), 2000);
+        }
+
+        searchInput.addEventListener("input", (e) => renderCheatsheet(e.target.value));
+        renderCheatsheet();
+    </script>
+    
+    <footer class="mt-10 text-center text-gray-400">
+        Made with ❤️ by Karthik &copy; <span id="year"></span>
+    </footer>
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

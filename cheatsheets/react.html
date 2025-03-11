@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React JS Cheatsheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+    <div class="max-w-3xl mx-auto">
+         <nav class="text-gray-400 mb-4">
+            <a href="../index.html" class="text-blue-400 hover:underline">Home</a> / <span class="text-gray-300">React JS Cheatsheet</span>
+        </nav>
+        <h1 class="text-3xl font-bold mb-4 text-center">React JS Cheatsheet</h1>
+        <input type="text" id="search" placeholder="Search a keyword..." class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded-md">
+        <div id="cheatsheet" class="space-y-2"></div>
+    </div>
+    
+    <script>
+        const snippets = [
+            { name: 'Component', code: 'function MyComponent() { return <div>Hello World</div>; }' },
+            { name: 'JSX', code: '<div className="container">Hello JSX</div>' },
+            { name: 'Props', code: 'const Greeting = ({ name }) => <h1>Hello, {name}!</h1>;' },
+            { name: 'State (useState)', code: 'const [count, setCount] = useState(0);' },
+            { name: 'Effect (useEffect)', code: 'useEffect(() => { console.log("Mounted"); }, []);' },
+            { name: 'Event Handling', code: '<button onClick={() => alert("Clicked!")}>Click Me</button>' },
+            { name: 'Conditional Rendering', code: '{isLoggedIn ? <Dashboard /> : <Login />}' },
+            { name: 'Map Function', code: '{items.map(item => <li key={item.id}>{item.name}</li>)}' },
+            { name: 'Fragment', code: '<> <h1>Title</h1> <p>Paragraph</p> </>' },
+            { name: 'Context API', code: 'const value = useContext(MyContext);' },
+            { name: 'Ref (useRef)', code: 'const inputRef = useRef(null);' },
+            { name: 'Memoization (useMemo)', code: 'const computedValue = useMemo(() => compute(value), [value]);' },
+            { name: 'Callback Hook', code: 'const memoizedCallback = useCallback(() => { doSomething(); }, [dependencies]);' },
+            { name: 'Custom Hook', code: 'function useCustomHook() { const [state, setState] = useState(null); return state; }' },
+        ];
+
+        const cheatsheetDiv = document.getElementById("cheatsheet");
+        const searchInput = document.getElementById("search");
+
+        function renderCheatsheet(filter = "") {
+            cheatsheetDiv.innerHTML = "";
+            snippets.filter(snippet => snippet.name.toLowerCase().includes(filter.toLowerCase())).forEach(snippet => {
+                const div = document.createElement("div");
+                div.className = "flex justify-between p-2 bg-gray-800 rounded-md cursor-pointer hover:bg-gray-700";
+                div.innerHTML = `<span class='font-mono text-yellow-400'>${snippet.name}</span> <code class='text-gray-300'>${snippet.code}</code>`;
+                div.onclick = async () => {
+                    await navigator.clipboard.writeText(snippet.code);
+                    showNotification(`Copied: ${snippet.code}`);
+                };
+                cheatsheetDiv.appendChild(div);
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement("div");
+            notification.className = "fixed bottom-4 right-4 p-3 bg-green-500 text-white rounded-md shadow-lg";
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => document.body.removeChild(notification), 2000);
+        }
+
+        searchInput.addEventListener("input", (e) => renderCheatsheet(e.target.value));
+        renderCheatsheet();
+    </script>
+    
+    <footer class="mt-10 text-center text-gray-400">
+        Made with ❤️ by Karthik &copy; <span id="year"></span>
+    </footer>
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
